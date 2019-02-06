@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!-- 493 WARNING
+     note that the following CDN links
+     will work only when you have internet access
+     It incldues
+     jQuery
+     bootstrap
+     and
+     angular.js
+     note that jQuery is added to enable bootstrap.
+     You should NOT use jQuery.
+   -->
+
+<html lang="en-US">
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129305620-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-129305620-1');
+  </script>
+
+  <title>Artist Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="script.js"></script>
+  </title>
+</head>
+<style>
+h3 {
+  text-align: center;
+}
+
+h4 {
+  text-align: center;
+}
+
+h5{
+  padding-bottom: 5px;
+  padding-top: 3px;
+}
+
+.genre{
+  border:solid 2px;
+  border-radius: 3px;
+  margin:5px;
+  white-space: nowrap;
+  background-color:#ccc;
+  padding:2px;
+}
+
+</style>
+<body ng-app = "493Search">
+
+  <div class="container">
+
+       <h3>Artist Search</h3>
+
+  </div>
+
+<div class = "container" ng-controller="searchResult">
+  <div class = "row searchbar" >
+    <div style="text-align: center;"class = "col-lg-12 col-md-12 col-sm-12" >
+      <h4>Enter the name of the artist and enter : </h4>
+      <input style="    border: none;
+    border-bottom: gray 2px solid; font-size: 40px;text-align: center;"name="userInput" ng-model="box" type="text" ng-keyup="keyPress($event.keyCode)" >
+
+    </div>
+  </div>
+  <div class = "row" ng-show="shower">
+    <div class = "col-lg-12 col-md-12 col-sxs-12">
+      <h4>Search Result (Total {{ found }} found.)</h4>
+      <h4>
+        Click to see the detail.
+      </h4>
+    </div>
+  </div>
+  <h3 ng-show="noResults"> NO RESULTS FOUND </h3>
+  <div class="container">
+    <div class = "row">
+      <div ng-repeat="item in things" class = "col-sm-6" style="height:250px;">
+        <div > 
+          <div class="" style="position: absolute; " >
+            <img src="{{ checkArt(item.artworkUrl100) }}" style="box-shadow: 5px 5px 5px grey; margin: auto; min-width: 100px; width: 150px;" >
+          </div>
+          <div class="" style="position: absolute; left: 180px;">
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#home-{{ $index }}" aria-controls="home" role="tab" data-toggle="tab" style="padding-left: .7pc; padding-right: .7pc;">Description</a></li>
+              <li ng-click="loadInfo(first2words(item.artistName, 2), $index)" role="presentation"><a href="#profile-{{ $index }}" aria-controls="profile" role="tab" data-toggle="tab" style="padding-left: .7pc; padding-right: .7pc; ">Artist Info</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="home-{{ $index }}">
+                <b>Artist Name: </b>{{ truncate(item.artistName) }}<br> 
+                <b>Collection Name: </b>{{ truncate(item.collectionName) }}<br> 
+                <b>Price: </b>{{ item.collectionPrice }}<br> 
+                <b>Type: </b>{{ item.kind }}<br> 
+                <b>Preview: </b> <a href="{{ item.previewUrl }}"> Link</a><br> 
+              </div>
+              <div role="tabpanel" class="tab-pane" id="profile-{{ $index }}" \>
+                <div >
+                  <img src="loading.gif" ng-show="load[{{$index}}]" style="height: 100px; left: 60px;position: absolute;">
+                  {{ truncateHun(snippets[ $index ])}}
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Description</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Artist Info</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                
+              </div>
+              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                ...
+              </div>
+            </div> -->
+
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
