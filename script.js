@@ -2,21 +2,6 @@ var app = angular.module('493Search', []);
 var entered = '';
 var counter = 0;
 
-// app.controller('searchResult',[ '$scope', '$http', function($scope, $http) {
-//   // your code goes here
-
-// }]);
-
-
-// app.controller('result', [ '$scope', '$http', function($scope, $http){
-// 	$http.get(' https://itunes.apple.com/search?term=anye').success(function(response){
-// 		$scope.things = response.results;
-// 		console.log(response)
-// 	});
-
-
-// }]);
-
 
 app.controller('searchResult',[ '$scope', '$http', function($scope, $http) {
   $scope.keyPress = function(e){
